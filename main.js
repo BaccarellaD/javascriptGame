@@ -29,6 +29,7 @@ let iter =  horizontalLines > verticalLines ? horizontalLines : verticalLines;
 
 let playBlock = new Block();
 let blockList = [];
+let sideCollision = false;
 
 
 function draw() {
@@ -36,12 +37,16 @@ function draw() {
 
     if(input.leftArrow || input.rightArrow) {
         if(input.leftArrow) {
-            playBlock.dx = -20;
-            input.leftArrow = false
+            if(!sideCollision) {
+                playBlock.dx = -20;
+                input.leftArrow = false
+            }
         }
         if(input.rightArrow) {
-            playBlock.dx = 20;
-            input.rightArrow = false
+            if(!sideCollision) {
+                playBlock.dx = 20;
+                input.rightArrow = false
+            }
         }
     }
     else {
@@ -86,10 +91,10 @@ function draw() {
 
         if (playBlock.middlex < block.middlex + block.width &&
             playBlock.middlex + playBlock.width > block.middlex &&
-            playBlock.middley+ 20  < block.middley + block.height &&
+            playBlock.middley + 20  < block.middley + block.height &&
             playBlock.height + playBlock.middley + 20  > block.middley) {
 
-            //
+
             playBlock.stopped = true;
             playBlock.dy = 0;
 

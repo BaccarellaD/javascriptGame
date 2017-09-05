@@ -11,10 +11,12 @@ class Block {
         this.height = 20;
     }
 
-    private static colorPicker() {
-        let colors = ["#ff0400",
+     colorPicker() {
+        let colors = [
+            "#ff0400",
             "#0100ff",
-            "#00ff02"];
+            "#00ff02"
+        ];
 
         let idx = Math.floor(Math.random() * 3);
 
@@ -23,7 +25,6 @@ class Block {
     }
 
     setPos(x,y) {
-
         this.x1 = x;
         this.y1 = y;
         this.x2 = x+20;
