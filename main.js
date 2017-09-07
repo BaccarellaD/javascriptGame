@@ -1,3 +1,6 @@
+
+alert("Hello!");
+
 let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
 let startx = canvas.width/2;
@@ -29,7 +32,35 @@ let iter =  horizontalLines > verticalLines ? horizontalLines : verticalLines;
 
 let playBlock = new Block();
 let blockList = [];
-let sideCollision = false;
+let leftSideCollision = function(){
+
+    for(let i = 0; i < blockList.length; i++) { //TODO: rework to work better with vertical blocks
+        let block = blockList[i];
+        console.log("block X: " + block.middlex);
+        console.log("playBlock X: " + playBlock.middlex);
+        if (playBlock.middlex-block.middlex <= block.width &&
+            playBlock.middlex-block.middlex >= 0 &&
+            Math.abs(playBlock.middley-block.middley) <= block.width) {
+                return true;
+        }
+    }
+    return playBlock.middlex <= 0;
+};
+
+let rightSideCollision = function(){
+
+    for(let i = 0; i < blockList.length; i++) { //TODO: rework to work better with vertical blocks
+        let block = blockList[i];
+        if (playBlock.middlex-block.middlex <= block.width &&
+            playBlock.middlex-block.middlex <= 0 &&
+            playBlock.middlex-block.middlex >= -block.width &&
+            Math.abs(playBlock.middley-block.middley) <= block.width) {
+                return true;
+        }
+    }
+
+    return (playBlock.middlex + playBlock.width)>= canvas.width;
+};
 
 
 function draw() {
@@ -37,13 +68,13 @@ function draw() {
 
     if(input.leftArrow || input.rightArrow) {
         if(input.leftArrow) {
-            if(!sideCollision) {
+            if(!leftSideCollision()) {
                 playBlock.dx = -20;
                 input.leftArrow = false
             }
         }
         if(input.rightArrow) {
-            if(!sideCollision) {
+            if(!rightSideCollision()) {
                 playBlock.dx = 20;
                 input.rightArrow = false
             }
@@ -85,8 +116,8 @@ function draw() {
 
     //Collision check with the play block and the placed blocks
     for(let i = 0; i < blockList.length; i++) {
-        let block = blockList[i];
-        block.update();
+            let block = blockList[i];
+            block.update();
 
 
         if (playBlock.middlex < block.middlex + block.width &&
@@ -97,8 +128,7 @@ function draw() {
 
             playBlock.stopped = true;
             playBlock.dy = 0;
-
-
+            break;
         }
     }
 
